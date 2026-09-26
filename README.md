@@ -23,14 +23,14 @@ mkdir -p my-project && copier copy --trust path/to/kovasz my-project
 
 ## on `copier copy`, kovasz:
 
-1. creates a **uv venv** and installs deps
+1. runs **uv sync**, which installs deps and writes a committed `uv.lock`
 2. registers a **jupyter kernel** named after your project
 3. sets up **pre-commit** hooks — ruff, ruff-format, nbstripout
 4. initialises a git repo with an initial commit
 
 ## comes with
 
-**tools** — uv, ruff, pre-commit, nbstripout, jupyterlab, ipykernel
+**tools** — uv, ruff, pytest, pre-commit, nbstripout, jupyterlab, ipykernel
 
 **geospatial stack** — xarray, rioxarray, rasterio, geopandas, pyproj
 
