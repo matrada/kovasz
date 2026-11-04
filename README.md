@@ -9,7 +9,7 @@ Make. Generate a project from the public template or a local clone:
 
 ```bash
 uv tool install "copier>=9.19.1"
-copier copy gh:matyasrada/kovasz my-project
+copier copy gh:matrada/kovasz my-project
 # Or, from a local development clone:
 # copier copy --vcs-ref HEAD path/to/kovasz my-project
 cd my-project
