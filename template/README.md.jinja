@@ -4,6 +4,79 @@
 
 ## Setup
 
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), Git, and
+Make first. Copier generated these files and `.copier-answers.yml`; it did not
+install anything or initialize Git. Inspect the files, then run from this directory:
+
 ```bash
+git init
 make init
+make check
 ```
+
+`make init` installs the complete research toolbox into `.venv`, creates or
+refreshes `uv.lock`, and installs the Git pre-commit hook. It is safe to run again.
+Keep `uv.lock` in Git so collaborators can reproduce the environment. When ready,
+create your own first commit (Git may require your name and email to be configured):
+
+```bash
+git add .
+git commit -m "Initialize research project"
+```
+
+Optionally register the Jupyter kernel and start JupyterLab:
+
+```bash
+make kernel
+uv run jupyter lab
+```
+
+Select **Python ({{ project_name }})**. The kernel name is `{{ project_name }}`;
+use `make kernel KERNEL_NAME=another-name` for another checkout. Kernel registration
+is separate from setup and uses your Jupyter user data directory.
+
+## Research
+
+Start notebooks in `notebooks/` and reusable Python code in `src/`; both begin
+empty. `make check` runs Ruff lint, formatting checks, and the geospatial import
+smoke test. `make test` runs only the tests.
+
+Keep downloaded data and generated results in `data/`, `inputs/`, `outputs/`, or
+`reports/` (see `.gitignore` for the complete directory policy). Small intentional
+fixtures outside ignored directories, including CSV and GeoJSON files in
+`tests/fixtures/`, can be committed.
+
+## Template updates
+
+Use Copier 9.19.1 or newer and keep `.copier-answers.yml` in Git; it records the
+versioned source and your generation answers. Commit your work and start with a
+clean worktree, then run from this project directory:
+
+```bash
+copier update --defaults
+# Select a particular later release if needed:
+# copier update --defaults --vcs-ref <tag>
+git diff
+git status --short
+```
+
+`README.md`, `notebooks/`, `src/`, and `data/` belong to this project. Template
+updates preserve them, including intentional deletions, and do not introduce new
+template content there. Keep notebooks and reusable research code in those
+directories. Shared tooling/configuration (such as `pyproject.toml`, `Makefile`,
+hook configuration, and smoke tests) receives updates and remains customizable.
+
+Review every change. Compatible shared-configuration edits merge; incompatible
+edits appear as inline conflicts (`<<<<<<<`, `=======`, `>>>>>>>`) for you to
+resolve. If you chose reject-file mode, resolve `.rej` files instead. Copier may
+finish with conflicts: check the diff and status even when the command succeeds.
+
+Updates change files only and create no project commits. After resolving
+conflicts and reviewing configuration/dependency changes, explicitly rerun
+`make init` and `make check`, review `uv.lock`, and commit the adopted changes.
+Kernel registration remains a separate optional `make kernel` action.
+
+These guarantees cover projects generated with the refreshed ownership rules.
+Older Kovász projects need individual migration review and have no automatic
+migration guarantee. This README is project-owned too; later template updates
+will not rewrite these instructions.

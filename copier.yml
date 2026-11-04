@@ -26,10 +26,18 @@ author:
 # ============================================
 # Template settings
 # ============================================
+_min_copier_version: "9.19.1"
 _subdirectory: template
 _templates_suffix: .jinja
 
-# Skip these patterns
+# These paths belong to the project after the initial copy. Exclude them from
+# both sides of Copier's update diff, including newly introduced template files.
+_exclude:
+  - "{% if _copier_operation == 'update' %}/README.md{% endif %}"
+  - "{% if _copier_operation == 'update' %}/notebooks/{% endif %}"
+  - "{% if _copier_operation == 'update' %}/src/{% endif %}"
+  - "{% if _copier_operation == 'update' %}/data/{% endif %}"
+
 _skip_if_exists:
   - "*.ipynb"
   - "data/**"
@@ -40,15 +48,3 @@ _skip_if_exists:
 _message_after_copy: |
 
   ✓ Project '{{ project_name }}' created!
-
-_tasks:
-  - "git init"
-  - "uv venv"
-  - "uv pip install -e ."
-  - "uv run python -m ipykernel install --user --name {{ project_name }} --display-name 'Python ({{ project_name }})'"
-  - "uv run pre-commit install"
-  - "git add ."
-  - "git commit -m 'init {{ project_name }} from kovasz template'"
-
-_exclude:
-  - README.md
