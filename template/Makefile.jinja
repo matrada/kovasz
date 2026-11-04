@@ -1,0 +1,23 @@
+.PHONY: init kernel test check clean
+
+init:
+	@git rev-parse --git-dir >/dev/null 2>&1 || { echo "Initialize Git first: git init"; exit 1; }
+	uv sync
+	uv run pre-commit install
+
+# Register only when requested; override KERNEL_NAME for multiple checkouts.
+KERNEL_NAME ?= {{ project_name }}
+kernel:
+	uv run python -m ipykernel install --user --name "$(KERNEL_NAME)" --display-name "Python ($(KERNEL_NAME))"
+
+test:
+	uv run pytest
+
+check:
+	uv run ruff check .
+	uv run ruff format --check .
+	uv run pytest
+
+clean:
+	rm -rf .venv __pycache__ .ruff_cache .pytest_cache
+	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true

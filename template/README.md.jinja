@@ -4,6 +4,44 @@
 
 ## Setup
 
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), Git, and
+Make first. Copier generated these files and `.copier-answers.yml`; it did not
+install anything or initialize Git. Inspect the files, then run from this directory:
+
 ```bash
+git init
 make init
+make check
 ```
+
+`make init` installs the complete research toolbox into `.venv`, creates or
+refreshes `uv.lock`, and installs the Git pre-commit hook. It is safe to run again.
+Keep `uv.lock` in Git so collaborators can reproduce the environment. When ready,
+create your own first commit (Git may require your name and email to be configured):
+
+```bash
+git add .
+git commit -m "Initialize research project"
+```
+
+Optionally register the Jupyter kernel and start JupyterLab:
+
+```bash
+make kernel
+uv run jupyter lab
+```
+
+Select **Python ({{ project_name }})**. The kernel name is `{{ project_name }}`;
+use `make kernel KERNEL_NAME=another-name` for another checkout. Kernel registration
+is separate from setup and uses your Jupyter user data directory.
+
+## Research
+
+Start notebooks in `notebooks/` and reusable Python code in `src/`; both begin
+empty. `make check` runs Ruff lint, formatting checks, and the geospatial import
+smoke test. `make test` runs only the tests.
+
+Keep downloaded data and generated results in `data/`, `inputs/`, `outputs/`, or
+`reports/` (see `.gitignore` for the complete directory policy). Small intentional
+fixtures outside ignored directories, including CSV and GeoJSON files in
+`tests/fixtures/`, can be committed.

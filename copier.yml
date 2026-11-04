@@ -40,21 +40,3 @@ _skip_if_exists:
 _message_after_copy: |
 
   ✓ Project '{{ project_name }}' created!
-
-# Tasks only run on `copier copy`, so `copier update` never re-inits or commits.
-_tasks:
-  - command: "git init"
-    when: "{{ _copier_operation == 'copy' }}"
-  - command: "uv sync"
-    when: "{{ _copier_operation == 'copy' }}"
-  - command: "uv run python -m ipykernel install --user --name {{ project_name }} --display-name 'Python ({{ project_name }})'"
-    when: "{{ _copier_operation == 'copy' }}"
-  - command: "uv run pre-commit install"
-    when: "{{ _copier_operation == 'copy' }}"
-  - command: "git add ."
-    when: "{{ _copier_operation == 'copy' }}"
-  - command: "git commit -m 'init {{ project_name }} from kovasz template'"
-    when: "{{ _copier_operation == 'copy' }}"
-
-_exclude:
-  - README.md
